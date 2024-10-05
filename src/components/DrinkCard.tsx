@@ -1,4 +1,4 @@
-import { useEffect } from "react"
+
 import { useAppStore } from "../stores/useAppStore"
 import type { Drink } from "../types"
 
@@ -7,9 +7,6 @@ type DrinkCardProps = {
 }
 export default function Drinkcard({ drink }: DrinkCardProps) {
   const selectRecipe = useAppStore((state) => state.selectRecipe)
-  useEffect(() => {
-
-  })
   return (
     <div className=" border shadow-lg">
       <div className="overflow-hidden">
