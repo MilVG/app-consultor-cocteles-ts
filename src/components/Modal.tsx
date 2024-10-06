@@ -1,10 +1,31 @@
 import { Dialog, TransitionChild, DialogTitle, DialogPanel, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
 import { useAppStore } from '../stores/useAppStore';
+import { Recipe } from '../types';
 
 export default function Modal() {
   const modal = useAppStore((state) => state.modal)
   const closemodal = useAppStore((state) => state.closeModal)
+  const selectedRecipe = useAppStore((state) => state.selectedRecipe)
+
+  const renderIngredients = () => {
+
+    const ingredients: JSX.Element[] = []
+    for (let index = 1; index <= 6; index++) {
+      const ingredient = selectedRecipe[`strIngredient${index}` as keyof Recipe];
+      const measure = selectedRecipe[`strMeasure${index}` as keyof Recipe];
+
+      if (ingredient && measure) {
+        ingredients.push(
+          <li key={index} className='text-lg font-normal'>
+            {ingredient} - {measure}
+          </li>
+        )
+      }
+
+    }
+    return ingredients
+  }
   return (
     <>
       <Transition appear show={modal} as={Fragment}>
@@ -33,15 +54,20 @@ export default function Modal() {
                 leaveTo="opacity-0 scale-95"
               >
                 <DialogPanel className="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-2xl sm:p-6" >
-                  <DialogTitle as="h3" className="text-gray-900 text-4xl font-extrabold my-5 text-center">
-                    Titulo Aquí
-                  </DialogTitle>
+                  <DialogTitle as="h3" className="text-gray-900 text-4xl font-extrabold my-5 text-center">{selectedRecipe.strDrink}</DialogTitle>
+
+                  <img
+                    src={selectedRecipe.strDrinkThumb}
+                    alt={`Imagen de ${selectedRecipe.strDrink}`}
+                  />
                   <DialogTitle as="h3" className="text-gray-900 text-2xl font-extrabold my-5">
                     Ingredientes y Cantidades
                   </DialogTitle>
+                  {renderIngredients()}
                   <DialogTitle as="h3" className="text-gray-900 text-2xl font-extrabold my-5">
                     Instrucciones
                   </DialogTitle>
+                  <p className=' text-lg'>{selectedRecipe.strInstructions}</p>
                 </DialogPanel>
               </TransitionChild>
             </div>
